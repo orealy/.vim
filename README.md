@@ -6,6 +6,7 @@ Next, you need to checkout the package management system.
 
 Now install the bundles:
 > vim +BundleInstall +qall
+
 or in vim:
 > :BundleInstall
 
