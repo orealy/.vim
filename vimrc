@@ -22,10 +22,10 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'majutsushi/tagbar'
 "Bundle 'taglist.vim'
 " View open buffers in top of window.
-Bundle 'git://github.com/fholgado/minibufexpl.vim.git'
+Bundle 'fholgado/minibufexpl.vim'
 " Search files in directory. Need to compile it first: > cd
 " ~/.vim/bundle/command-t/ruby/command-t > ruby extconf.rb > make
-Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'wincent/Command-T'
 " Snipmate and its dependencies
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
