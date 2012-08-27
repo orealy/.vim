@@ -10,4 +10,9 @@ Now install the bundles:
 or in vim:
 > :BundleInstall
 
+To get command-t working:
+> cd ~/.vim/bundle/Command-t/ruby/command-t
+> ruby extconf.rb
+> make
+
 Done.
