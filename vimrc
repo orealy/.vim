@@ -13,39 +13,43 @@ call vundle#rc()
 " :BundleClean(!)      - confirm(or auto-approve) removal of
 "                        unused bundles
 " see :h vundle for more details or wiki for FAQ
-
 Bundle 'gmarik/vundle'
-" My Bundles
-" Colors!
-Bundle 'altercation/vim-colors-solarized'
-" Press <F8> for list of tags in open files.
-Bundle 'majutsushi/tagbar'
-"Bundle 'taglist.vim'
-" View open buffers in top of window.
-Bundle 'fholgado/minibufexpl.vim'
-" Search files in directory. Need to compile it first: > cd
-" ~/.vim/bundle/command-t/ruby/command-t > ruby extconf.rb > make
-Bundle 'wincent/Command-T'
-" Snipmate and its dependencies
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'honza/snipmate-snippets'
-Bundle 'garbas/vim-snipmate'
-" Swith to alternate files.
-Bundle 'a.vim'
-" Edit surroundings.
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-surround'
-" Comment out blocks with \\ or
-Bundle 'tpope/vim-commentary'
-" Nerdtree!
-Bundle 'scrooloose/nerdtree'
-" Vim-latex
-"Bundle 'jcf/vim-latex'
-" Super-tab
-Bundle 'ervandew/supertab'
-" Syntax checker
-Bundle 'scrooloose/syntastic'
+
+" General Bundles (i.e. not programming specific).
+    " Colors!
+    Bundle 'altercation/vim-colors-solarized'
+    " View open buffers in top of window.
+    Bundle 'fholgado/minibufexpl.vim'
+    " Search files in directory. Need to compile it first: > cd
+    " ~/.vim/bundle/command-t/ruby/command-t > ruby extconf.rb > make
+    Bundle 'wincent/Command-T'
+    " Nerdtree!
+    Bundle 'scrooloose/nerdtree'
+    Bundle 'Lokaltog/vim-powerline'
+
+" Editing Bundles
+    " Auto-close characters.
+    Bundle 'Townk/vim-autoclose'
+    " Super-tab
+    Bundle 'ervandew/supertab'
+    " Comment out blocks with \\ or
+    Bundle 'tpope/vim-commentary'
+    " Edit surroundings.
+    Bundle 'tpope/vim-repeat'
+    Bundle 'tpope/vim-surround'
+
+" Programming Bundles
+    " Syntax checker
+    Bundle 'scrooloose/syntastic'
+    " Snipmate and its dependencies
+    Bundle 'MarcWeber/vim-addon-mw-utils'
+    Bundle 'tomtom/tlib_vim'
+    Bundle 'honza/snipmate-snippets'
+    Bundle 'garbas/vim-snipmate'
+    " Press <F8> for list of tags in open files.
+    Bundle 'majutsushi/tagbar'
+    " Swith to alternate files.
+    Bundle 'a.vim'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
@@ -57,6 +61,8 @@ filetype plugin on
 filetype indent on
 " Set to auto read when a file is changed from the outside
 set autoread
+"Always show the status line.
+set laststatus=2
 " With a map leader it's possible to do extra key combinations like <leader>w
 " saves the current file
 let mapleader = ","
@@ -101,7 +107,7 @@ set bg=dark
 
 set nonu
 
-set encoding=utf8
+set encoding=utf-8
 try
     lang en_US
 catch
@@ -171,14 +177,15 @@ endfunction
 " => Spell checking
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
+nnoremap <leader>ss :setlocal spell!<cr>
 
 "Shortcuts using <leader>
-map <leader>sn ]s " Next wrong word.
-map <leader>sp [s " Prev wrong word.
-map <leader>sa zg " Add word to spellfile
-map <leader>s? z= " Suggest words.
-map <leader>sr zw " Remove the word from spellfile.
+nnoremap <leader>sn ]s " Next wrong word.
+nnoremap <leader>sp [s " Prev wrong word.
+nnoremap <leader>sa zg " Add word to spellfile
+nnoremap <leader>s? z= " Suggest words.
+nnoremap <leader>sc z= " Suggest words.
+nnoremap <leader>sr zw " Remove the word from spellfile.
 
 """"""""""""""""""""""""""""""
 " => Command-T
@@ -277,3 +284,5 @@ set showcmd
 nnoremap N Nzz
 nnoremap n nzz
 inoremap jj <Esc>
+
+"au BufRead,BufNewFile *.Rnw    set filetype=noweb
