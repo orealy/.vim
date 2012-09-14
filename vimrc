@@ -74,7 +74,11 @@ set nocompatible
 
     " Highlight overlength lines.
     highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-    match OverLength /\%81v.\+/
+    autocmd BufWrite * match OverLength /\%81v.\+/
+
+    " Default to very magic
+    nnoremap / /\v
+    vnoremap / /\v
 
 " VIM user interface settings
     set so=7 " Set 7 lines to the curors - when moving vertical.
