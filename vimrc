@@ -52,6 +52,9 @@ set nocompatible
     Bundle 'garbas/vim-snipmate'
     " Press <F8> for list of tags in open files.
     Bundle 'majutsushi/tagbar'
+    " Markdown viewing
+    " Also follow the instructions on the github page.
+    Bundle 'suan/vim-instant-markdown'
 
 " General
     " Enable filetype plugin
@@ -77,8 +80,8 @@ set nocompatible
     autocmd BufWrite * match OverLength /\%81v.\+/
 
     " Default to very magic
-    nnoremap / /\v
-    vnoremap / /\v
+    " nnoremap / /\v
+    " vnoremap / /\v
 
 " VIM user interface settings
     set so=7 " Set 7 lines to the curors - when moving vertical.
@@ -114,7 +117,7 @@ set nocompatible
     " PS1='\[\e[1;39m\]\u:\w$\[\e[1;37m\] '
     colorscheme solarized
     set t_Co=16
-    set bg=dark
+    set bg=light
 
     set nonu
 
@@ -261,3 +264,7 @@ set nocompatible
         nnoremap <silent> <F8> :TagbarToggle<CR>
         let g:tagbar_autoclose=1
         let g:tagbar_width = 30
+
+    " Instant-Markdown
+      map <leader>md :call ToggleMarkdown()<CR>
+
