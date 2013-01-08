@@ -64,8 +64,8 @@ set nocompatible
     set autoread
     "Always show the status line.
     set laststatus=2
-    " With a map leader it's possible to do extra key combinations like <leader>w
-    " saves the current file
+    " With a map leader it's possible to do extra key combinations.
+    " For example, <leader>w saves the current file
     let mapleader = ","
     let g:mapleader = ","
 
@@ -75,9 +75,13 @@ set nocompatible
     " Remove any trailing whitespace that is in the file
     autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
-    " Highlight overlength lines.
-    highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-    autocmd BufWrite * match OverLength /\%81v.\+/
+    " augroup vimrc_autocmds
+    "     autocmd BufEnter * highlight OverLength ctermbg=darkgrey guibg=#111111
+    "     autocmd BufEnter * match OverLength /\%81v.*/
+    " augroup END
+
+    " Colour the 81 column
+    set colorcolumn=81
 
     " Default to very magic
     " nnoremap / /\v
@@ -136,6 +140,7 @@ set nocompatible
     set noswapfile
     " Sets how many lines of history VIM has to remember
     set history=700
+    set cm=blowfish
 
 " Text, tab and indent related
     set expandtab
