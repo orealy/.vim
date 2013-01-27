@@ -41,6 +41,8 @@ set nocompatible
     " Edit surroundings.
     Bundle 'tpope/vim-repeat'
     Bundle 'tpope/vim-surround'
+    "Bundle 'tpope/vim-markdown'
+    Bundle 'plasticboy/vim-markdown'
 
 " Programming Bundles
     " Syntax checker
@@ -55,6 +57,7 @@ set nocompatible
     " Markdown viewing
     " Also follow the instructions on the github page.
     Bundle 'suan/vim-instant-markdown'
+    Bundle 'jpalardy/vim-slime'
 
 " General
     " Enable filetype plugin
@@ -200,6 +203,12 @@ set nocompatible
     " Built in maps it is good to know.
     " <C-w>= or <C-w>| to equalise vertical/hozontal window size.
 
+    " Overwrite protected file.
+    cmap w!! %!sudo tee > /dev/null %
+
+    " Insert single character
+    :nmap <Space> i_<Esc>r
+
 " Visual mode Serach
     " Really useful!
     "  In visual mode when you press * or # to search for the current selection
@@ -214,26 +223,26 @@ set nocompatible
 
     " From an idea by Michael Naumann
     function! VisualSearch(direction) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
+      let l:saved_reg = @"
+      execute "normal! vgvy"
 
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
+      let l:pattern = escape(@", '\\/.*$^~[]')
+      let l:pattern = substitute(l:pattern, "\n$", "", "")
 
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
-    endif
+      if a:direction == 'b'
+          execute "normal ?" . l:pattern . "^M"
+      elseif a:direction == 'gv'
+          call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+      elseif a:direction == 'f'
+          execute "normal /" . l:pattern . "^M"
+      endif
 
-    let @/ = l:pattern
-    let @" = l:saved_reg
+      let @/ = l:pattern
+      let @" = l:saved_reg
     endfunction
 
 " Spell checking
-    "Pressing ,ss will toggle and untoggle spell checking
+    "Pressing ss will toggle and untoggle spell checking
     nnoremap <leader>ss :setlocal spell!<cr>
 
     "Shortcuts using <leader>
@@ -271,5 +280,5 @@ set nocompatible
         let g:tagbar_width = 30
 
     " Instant-Markdown
-      map <leader>md :call ToggleMarkdown()<CR>
+    "  map <leader>md :call ToggleMarkdown()<CR>
 
