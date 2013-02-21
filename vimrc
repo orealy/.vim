@@ -27,7 +27,7 @@ set nocompatible
     Bundle 'wincent/Command-T'
     " Nerdtree!
     Bundle 'scrooloose/nerdtree'
-    Bundle 'Lokaltog/vim-powerline'
+    Bundle 'Lokaltog/powerline'
     Bundle 'godlygeek/tabular'
     Bundle 'duff/vim-bufonly'
 
@@ -41,7 +41,7 @@ set nocompatible
     " Edit surroundings.
     Bundle 'tpope/vim-repeat'
     Bundle 'tpope/vim-surround'
-    "Bundle 'tpope/vim-markdown'
+    " Bundle 'tpope/vim-markdown'
     Bundle 'plasticboy/vim-markdown'
 
 " Programming Bundles
@@ -56,7 +56,7 @@ set nocompatible
     Bundle 'majutsushi/tagbar'
     " Markdown viewing
     " Also follow the instructions on the github page.
-    Bundle 'suan/vim-instant-markdown'
+    " Bundle 'suan/vim-instant-markdown'
     Bundle 'jpalardy/vim-slime'
 
 " General
@@ -67,6 +67,8 @@ set nocompatible
     set autoread
     "Always show the status line.
     set laststatus=2
+    " Hide the default mode text. I use powerline instead.
+    set noshowmode
     " With a map leader it's possible to do extra key combinations.
     " For example, <leader>w saves the current file
     let mapleader = ","
@@ -204,7 +206,11 @@ set nocompatible
     " <C-w>= or <C-w>| to equalise vertical/hozontal window size.
 
     " Overwrite protected file.
-    cmap w!! %!sudo tee > /dev/null %
+    cmap w!! call SudoWrite()
+    function! SudoWrite()
+      %!sudo tee > /dev/null %
+      qall!
+    endfunction
 
     " Insert single character
     :nmap <Space> i_<Esc>r
@@ -254,6 +260,17 @@ set nocompatible
     nnoremap <leader>sr zw " Remove the word from spellfile.
 
 " Plugin Settings
+    " Powerline
+    set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+    if ! has('gui_running')
+        set ttimeoutlen=10
+        augroup FastEscape
+            autocmd!
+            au InsertEnter * set timeoutlen=0
+            au InsertLeave * set timeoutlen=1000
+        augroup END
+    endif
+
     "Command-T
         let g:CommandTMaxHeight = 12
         set wildignore+=*.o,*.obj,.git,*.pyc
@@ -279,6 +296,17 @@ set nocompatible
         let g:tagbar_autoclose=1
         let g:tagbar_width = 30
 
-    " Instant-Markdown
-    "  map <leader>md :call ToggleMarkdown()<CR>
+    " Syntastic
+    let g:syntastic_mode_map = { 'mode': 'passive',
+                               \ 'active_filetypes': [],
+                               \ 'passive_filetypes': [] }
+
+    " Slime
+    let g:slime_target = "tmux"
+
+    " Markdown
+    autocmd Filetype mkd set nofoldenable
+
+
+
 
