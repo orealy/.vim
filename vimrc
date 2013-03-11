@@ -41,8 +41,8 @@ set nocompatible
     " Edit surroundings.
     Bundle 'tpope/vim-repeat'
     Bundle 'tpope/vim-surround'
-    " Bundle 'tpope/vim-markdown'
-    Bundle 'plasticboy/vim-markdown'
+    Bundle 'tpope/vim-markdown'
+    " Bundle 'plasticboy/vim-markdown'
 
 " Programming Bundles
     " Syntax checker
@@ -187,6 +187,10 @@ set nocompatible
         qall
     endfunction
 
+    " Move everything up and down
+    " :nnoremap j gj
+    " :nnoremap k gk
+
     " Save entire session.
     nmap <silent> <leader>wa :call SaveSession()<CR>
     function! SaveSession()
@@ -215,7 +219,7 @@ set nocompatible
     " Insert single character
     :nmap <Space> i_<Esc>r
 
-" Visual mode Serach
+" Visual mode Search
     " Really useful!
     "  In visual mode when you press * or # to search for the current selection
     vnoremap <silent> * :call VisualSearch('f')<CR>

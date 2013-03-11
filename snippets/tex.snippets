@@ -1,0 +1,22 @@
+snippet figure
+	\begin{figure}[htp]
+	  \centering
+	  \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{${3:figures/}${1:image name}}
+	  \caption{${2:caption}}
+	  \label{fig:$1}
+	\end{figure}
+	${4}
+
+snippet ieee
+	\begin{IEEEeqnarray*}{rCL}
+		${1}
+		% a &=& b \\
+		% \IEEEyesnumber \label{eq:taylor}
+	\end{IEEEeqnarray*}
+
+snippet frame
+	\begin{frame}
+		\frametitle{${1:title}}
+
+	\end{frame}
+
