@@ -24,7 +24,7 @@ set nocompatible
     Bundle 'fholgado/minibufexpl.vim'
     " Search files in directory. Need to compile it first: > cd
     " ~/.vim/bundle/command-t/ruby/command-t > ruby extconf.rb > make
-    Bundle 'wincent/Command-T'
+    " Bundle 'wincent/Command-T'
     " Nerdtree!
     Bundle 'scrooloose/nerdtree'
     Bundle 'Lokaltog/powerline'
