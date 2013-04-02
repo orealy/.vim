@@ -263,6 +263,11 @@ set nocompatible
     nnoremap <leader>sc z= " Suggest words.
     nnoremap <leader>sr zw " Remove the word from spellfile.
 
+" Filetype settings
+    " Markdown
+    autocmd Filetype mkd set nofoldenable
+    autocmd Filetype vim set foldmethod=indent
+
 " Plugin Settings
     " Powerline
     set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
@@ -307,10 +312,3 @@ set nocompatible
 
     " Slime
     let g:slime_target = "tmux"
-
-    " Markdown
-    autocmd Filetype mkd set nofoldenable
-
-
-
-
