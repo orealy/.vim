@@ -266,6 +266,7 @@ set nocompatible
 " Filetype settings
     " Markdown
     autocmd Filetype mkd set nofoldenable
+    autocmd Filetype scheme set foldmethod=indent
     autocmd Filetype vim set foldmethod=indent
 
 " Plugin Settings
