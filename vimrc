@@ -22,41 +22,40 @@ set nocompatible
     Bundle 'altercation/vim-colors-solarized'
     " View open buffers in top of window.
     Bundle 'fholgado/minibufexpl.vim'
-    " Search files in directory. Need to compile it first: > cd
-    " ~/.vim/bundle/command-t/ruby/command-t > ruby extconf.rb > make
-    " Bundle 'wincent/Command-T'
+    " Full path fuzzy file, buffer, mru, tag, finder
+    Bundle 'kien/ctrlp.vim'
     " Nerdtree!
     Bundle 'scrooloose/nerdtree'
+    " Pretty status line
     Bundle 'Lokaltog/powerline'
+    " Align Text
     Bundle 'godlygeek/tabular'
+    " Delete all buffers except current
     Bundle 'duff/vim-bufonly'
+    Bundle 'mhinz/vim-startify'
 
 " Editing Bundles
     " Auto-close characters.
     Bundle 'Townk/vim-autoclose'
-    " Super-tab
+    " Super-tab for autocompletion
     Bundle 'ervandew/supertab'
     " Comment out blocks with \\ or
     Bundle 'tpope/vim-commentary'
-    " Edit surroundings.
+    " Fix the '.' command for mappings.
     Bundle 'tpope/vim-repeat'
+    " Edit surroundings. ds'=>'adw'->adw. cs(]=>(X)->[X],cs([=>(X)->[ X ]
     Bundle 'tpope/vim-surround'
+    " Syntax highlighting for markdown.
     Bundle 'tpope/vim-markdown'
-    " Bundle 'plasticboy/vim-markdown'
 
 " Programming Bundles
     " Syntax checker
     Bundle 'scrooloose/syntastic'
-    " Snipmate and its dependencies
-    Bundle 'MarcWeber/vim-addon-mw-utils'
-    Bundle 'tomtom/tlib_vim'
-    Bundle 'honza/snipmate-snippets'
-    Bundle 'garbas/vim-snipmate'
+    " " Snipmate and its dependencies
+    Bundle 'vim-scripts/UltiSnips'
     " Press <F8> for list of tags in open files.
     Bundle 'majutsushi/tagbar'
-    " Markdown viewing
-    " Also follow the instructions on the github page.
-    " Bundle 'suan/vim-instant-markdown'
+    " Pipe text between screen/tmux sesions.
     Bundle 'jpalardy/vim-slime'
 
 " General
@@ -80,17 +79,8 @@ set nocompatible
     " Remove any trailing whitespace that is in the file
     autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
-    " augroup vimrc_autocmds
-    "     autocmd BufEnter * highlight OverLength ctermbg=darkgrey guibg=#111111
-    "     autocmd BufEnter * match OverLength /\%81v.*/
-    " augroup END
-
     " Colour the 81 column
     set colorcolumn=81
-
-    " Default to very magic
-    " nnoremap / /\v
-    " vnoremap / /\v
 
 " VIM user interface settings
     set so=7 " Set 7 lines to the curors - when moving vertical.
@@ -111,24 +101,20 @@ set nocompatible
     " No sound on errors
     set noerrorbells
     set novisualbell
-    set t_vb=
     set tm=500
 
     set cul
     set showcmd
 
+    set nonu
 " Colors and Fonts
     syntax enable "Enable syntax hl
 
     " Update gnome color palete for compatability.
     " https://github.com/sigurdga/gnome-terminal-colors-solarized
-    " Also added this prompt (needs to be bold)
-    " PS1='\[\e[1;39m\]\u:\w$\[\e[1;37m\] '
     colorscheme solarized
     set t_Co=16
     set bg=light
-
-    set nonu
 
     set encoding=utf-8
     try
@@ -149,8 +135,8 @@ set nocompatible
 
 " Text, tab and indent related
     set expandtab
-    set shiftwidth=4
-    set tabstop=4
+    set shiftwidth=2
+    set tabstop=2
     set smarttab
 
     set tw=80
@@ -160,10 +146,10 @@ set nocompatible
     set wrap "Wrap lines
 
 " Key Mappings
-    " Use Enter/Shift-enter to add line below/above.
+    " Use Enter to add line below.
     nnoremap <CR> o<Esc>
-    " TERMINAL STEALS ME!
-    nnoremap <S-CR> O<Esc>
+    " Stop comment leader being inserted after 'o' or 'O' in normal mode.
+    set formatoptions-=o
 
     " Map ctrl-movement keys to window switching
     map <C-k> <C-w><Up>
@@ -187,15 +173,13 @@ set nocompatible
         qall
     endfunction
 
-    " Move everything up and down
-    " :nnoremap j gj
-    " :nnoremap k gk
-
     " Save entire session.
     nmap <silent> <leader>wa :call SaveSession()<CR>
     function! SaveSession()
-        mks! ~/.vim/sessions/session.vim
+        mks! ~/.vim/session/auto.vim
     endfunction
+
+    autocmd VimLeave * call SaveSession()
 
     " Clear search history (i.e. stop highlights).
     nmap <silent> <leader><leader> :let @/=""<CR>
@@ -264,28 +248,31 @@ set nocompatible
     nnoremap <leader>sr zw " Remove the word from spellfile.
 
 " Filetype settings
-    " Markdown
-    autocmd Filetype mkd set nofoldenable
+    " Scheme
     autocmd Filetype scheme set foldmethod=indent
+    " Vim
     autocmd Filetype vim set foldmethod=indent
+    " Latex
+    autocmd Filetype tex set foldmethod=indent
+    " Python
+    autocmd Filetype python set shiftwidth=4
+    autocmd Filetype python set tabstop=4
+    " Markdown
+    autocmd Filetype markdown set shiftwidth=4
+    autocmd Filetype markdown set tabstop=4
+    " Fuck plaintex
+    let g:tex_flavor = "latex"
 
 " Plugin Settings
     " Powerline
     set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
     if ! has('gui_running')
-        set ttimeoutlen=10
         augroup FastEscape
             autocmd!
-            au InsertEnter * set timeoutlen=0
-            au InsertLeave * set timeoutlen=1000
+            au InsertEnter * set timeoutlen=200
+            au InsertLeave * set timeoutlen=500
         augroup END
     endif
-
-    "Command-T
-        let g:CommandTMaxHeight = 12
-        set wildignore+=*.o,*.obj,.git,*.pyc
-        noremap <leader>j :CommandT<cr>
-        noremap <leader>y :CommandTFlush<cr>
 
     " Mini-Buf Explorer
         map <leader>c :CMiniBufExplorer<cr>
@@ -307,9 +294,11 @@ set nocompatible
         let g:tagbar_width = 30
 
     " Syntastic
-    let g:syntastic_mode_map = { 'mode': 'passive',
-                               \ 'active_filetypes': [],
-                               \ 'passive_filetypes': [] }
+      " By default, don't auto check files.
+      " Use :SyntasticCheck to check the file.
+      let g:syntastic_mode_map = { 'mode': 'passive',
+                                 \ 'active_filetypes': [],
+                                 \ 'passive_filetypes': [] }
 
     " Slime
-    let g:slime_target = "tmux"
+      let g:slime_target = "tmux"
