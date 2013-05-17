@@ -37,8 +37,8 @@ set nocompatible
 " Editing Bundles
     " Auto-close characters.
     Bundle 'Townk/vim-autoclose'
-    " Super-tab for autocompletion
-    Bundle 'ervandew/supertab'
+    " Word completion
+    Bundle 'Valloric/YouCompleteMe'
     " Comment out blocks with \\ or
     Bundle 'tpope/vim-commentary'
     " Fix the '.' command for mappings.
@@ -78,9 +78,6 @@ set nocompatible
 
     " Remove any trailing whitespace that is in the file
     autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-
-    " Colour the 81 column
-    set colorcolumn=81
 
 " VIM user interface settings
     set so=7 " Set 7 lines to the curors - when moving vertical.
@@ -139,7 +136,8 @@ set nocompatible
     set tabstop=2
     set smarttab
 
-    set tw=80
+    set tw=74
+    set colorcolumn=75
 
     set ai "Auto indent
     set si "Smart indet
@@ -152,10 +150,10 @@ set nocompatible
     set formatoptions-=o
 
     " Map ctrl-movement keys to window switching
-    map <C-k> <C-w><Up>
-    map <C-j> <C-w><Down>
-    map <C-l> <C-w><Right>
-    map <C-h> <C-w><Left>
+    noremap <C-k> <C-w><Up>
+    noremap <C-j> <C-w><Down>
+    noremap <C-l> <C-w><Right>
+    noremap <C-h> <C-w><Left>
 
     " Map tab in normal mode to buffer switching.
     nnoremap <Tab> :bnext<CR>
@@ -167,14 +165,14 @@ set nocompatible
     nnoremap <silent> <leader>da :BufOnly<CR>
 
     " Quit all, but save to session default first.
-    nmap <leader>qa :call SaveAndExit()<CR>
+    nnoremap <leader>qa :call SaveAndExit()<CR>
     function! SaveAndExit()
         call SaveSession()
         qall
     endfunction
 
     " Save entire session.
-    nmap <silent> <leader>wa :call SaveSession()<CR>
+    nnoremap <silent> <leader>wa :call SaveSession()<CR>
     function! SaveSession()
         mks! ~/.vim/session/auto.vim
     endfunction
@@ -182,7 +180,7 @@ set nocompatible
     autocmd VimLeave * call SaveSession()
 
     " Clear search history (i.e. stop highlights).
-    nmap <silent> <leader><leader> :let @/=""<CR>
+    nnoremap <silent> <leader><leader> :let @/=""<CR>
 
     " Center search on next item.
     nnoremap N Nzz
@@ -201,7 +199,7 @@ set nocompatible
     endfunction
 
     " Insert single character
-    :nmap <Space> i_<Esc>r
+    nnoremap <Space> i_<Esc>r
 
 " Visual mode Search
     " Really useful!
@@ -275,9 +273,9 @@ set nocompatible
     endif
 
     " Mini-Buf Explorer
-        map <leader>c :CMiniBufExplorer<cr>
-        map <leader>u :UMiniBufExplorer<cr>
-        map <leader>t :TMiniBufExplorer<cr>
+        noremap <leader>c :CMiniBufExplorer<cr>
+        noremap <leader>u :UMiniBufExplorer<cr>
+        noremap <leader>t :TMiniBufExplorer<cr>
 
     " NERDTree
         " Open nerdtree if just vim opened.
@@ -288,7 +286,6 @@ set nocompatible
 
     " Tag Browser (currently Tagbar)
         " Toggle tag browser with F8
-        "nnoremap <silent> <F8> :TlistToggle<CR>
         nnoremap <silent> <F8> :TagbarToggle<CR>
         let g:tagbar_autoclose=1
         let g:tagbar_width = 30

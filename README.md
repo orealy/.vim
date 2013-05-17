@@ -19,6 +19,11 @@ Powerline requires some installation. UTF-8 support for terminal etc. See the
 documentation. I need to run this command sometimes when it updates.
 > pip install --user -U git+git://github.com/Lokaltog/powerline
 
+Shell aliases
+------------
+
+alias vims='vim -S ~/.vim/sessions/auto.vim'
+
 Windows
 -------
 
