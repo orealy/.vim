@@ -338,7 +338,7 @@ set nocompatible
         " By default, don't auto check files.
         " Use :SyntasticCheck to check the file.
         let g:syntastic_mode_map = { 'mode': 'passive',
-                                    \ 'active_filetypes': [],
+                                    \ 'active_filetypes': ['python', 'c'],
                                     \ 'passive_filetypes': [] }
 
     " Slime
