@@ -1,0 +1,27 @@
+{
+	"common": {
+		"term_24bit_colors": false,
+		"dividers": {
+			"left": {
+				"hard": " ",
+				"soft": " "
+			},
+			"right": {
+				"hard": " ",
+				"soft": " "
+			}
+		},
+		"spaces": 1
+	},
+	"ext": {
+		"vim": {
+			"colorscheme": "default",
+			"theme": "default",
+			"local_themes": {
+				"cmdwin": "cmdwin",
+				"help": "help",
+                "matcher_test.vim.unite": "unite"
+			}
+		}
+	}
+}
