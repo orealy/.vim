@@ -26,11 +26,12 @@ set nocompatible
     Bundle 'Shougo/vimproc.vim'
     " Pretty status line
 	Bundle 'Lokaltog/powerline'
+    " Delete all buffers except current with :BufOnly
+    Bundle 'duff/vim-bufonly'
+    " Give non-useless start-screen
+    Bundle 'mhinz/vim-startify'
     " Align Text
     " Bundle 'godlygeek/tabular'
-    " Delete all buffers except current
-    " Bundle 'duff/vim-bufonly'
-    " Bundle 'mhinz/vim-startify'
     " Bundle 'dhruvasagar/vim-table-mode'
 
 " Editing Bundles
@@ -46,6 +47,8 @@ set nocompatible
     Bundle 'tpope/vim-markdown'
     " Multiple Cursors
     Bundle 'terryma/vim-multiple-cursors'
+    " Create scratch with :Scratch
+    Bundle 'duff/vim-scratch'
 
 " Programming Bundles
     " Word completion
@@ -77,7 +80,7 @@ set nocompatible
     " Vim tags plugin will search up to the $HOME directory.
     set tags+=tags;$HOME
 
-    " Remove any trailing whitespace that is in the file
+    " Remove any trailing whitespace that is in the file on save
     augroup clearwhitespace
         autocmd!
         autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge |endif
@@ -87,38 +90,30 @@ set nocompatible
     set so=7 " Set 7 lines to the curors - when moving vertical.
     set ruler "Always show current position
     set cmdheight=2 "The commandbar height
-    set hid "Change buffer - without saving
+    set hid "Don't close buffer when you abandon it
     set backspace=eol,start,indent " Set backspace config
     set whichwrap+=<,>,h,l
-    "Ignore case when searching
+    "Ignore case when searching, unless using uppercase
     set ignorecase
     set smartcase
     set hlsearch "Highlight search things
     set incsearch "Make search act like search in modern browsers
-    " CHANGED!!
     set lazyredraw "Don't redraw while executing macros
     set magic "Set magic on, for regular expressions
-    " set showmatch "Show matching brackets when
     set mat=2 "How many tenths of a second to blink
-    " No sound on errors
-    set noerrorbells
-    set novisualbell
     set tm=500
     " Open all folds initially
     set foldmethod=indent
     set foldlevelstart=99
     set scrolloff=10 " limit # of lines above or below cursor
-    " Turn off sound
-    set vb
-    set t_vb=
+    set noerrorbells " No sound on errors
+    set showcmd " show partial command as you type
+    set number " show line number on left
 
-    " set cul
-    set showcmd
-    " set number
-
-    set wildmenu "Turn on WiLd menu
+    set wildmenu "Turn on wild menu, tab to go through completion options
     set wildmode=longest,list,full
-    set wildignore+=*.aux,*.out,*.toc " Latex intermediate files set wildignore+=.hg,.git,.svn "Version control
+    set wildignore+=*.aux,*.out,*.toc " Latex intermediate files
+    set wildignore+=.hg,.git,.svn "Version control
 
     " Splits appear in a sensible place
     set splitbelow
@@ -130,8 +125,8 @@ set nocompatible
     " Update gnome color palete for compatability.
     " https://github.com/sigurdga/gnome-terminal-colors-solarized
     colorscheme solarized
-    set t_Co=16
-    set bg=light
+    set t_Co=16 " Number of colours
+    set background=dark
 
     set encoding=utf-8
     try
@@ -139,7 +134,7 @@ set nocompatible
     catch
     endtry
 
-    set ffs=unix,dos,mac "Default file types
+    set fileformats=unix,dos,mac "Default file types
 
 " Files, backups and undo
     " Turn backup off, since most stuff is in SVN, git anyway...
@@ -148,6 +143,7 @@ set nocompatible
     set noswapfile
     " Sets how many lines of history VIM has to remember
     set history=700
+    " set encrypt method
     set cm=blowfish
 
 " Text, tab and indent related
@@ -168,10 +164,10 @@ set nocompatible
     " move down a wrapped line
     nnoremap j gj
     nnoremap k gk
-    " Use Enter to add line below.
+    " Use Enter to add line below from normal mode.
     nnoremap <CR> o<Esc>
     " Stop comment being inserted after 'o' or 'O' in normal mode.
-    set formatoptions-=o
+    set formatoptions=tcq
 
     " Useless default mappings
     nnoremap <F1> <nop>
@@ -181,11 +177,7 @@ set nocompatible
     " Yank from the cursor to the end of the line, like C and D
     nnoremap Y y$
 
-    " Map ctrl-movement keys to window switching
-    " inoremap <buffer> <C-h> <Esc><C-w>h
-    " inoremap <buffer> <C-j> <Esc><C-w>j
-    " inoremap <buffer> <C-k> <Esc><C-w>k
-    " inoremap <buffer> <C-l> <Esc><C-w>l
+    " Use <C-(dir) to move between vim windows or tmux
     if exists('$TMUX')
       function! TmuxOrSplitSwitch(wincmd, tmuxdir)
         let previous_winnr = winnr()
@@ -205,10 +197,10 @@ set nocompatible
       nnoremap <silent> <C-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
       nnoremap <silent> <C-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
     else
-      map <C-h> <C-w>h
-      map <C-j> <C-w>j
-      map <C-k> <C-w>k
-      map <C-l> <C-w>l
+      nnoremap <C-h> <C-w>h
+      nnoremap <C-j> <C-w>j
+      nnoremap <C-k> <C-w>k
+      nnoremap <C-l> <C-w>l
     endif
 
 
@@ -221,22 +213,17 @@ set nocompatible
     " Destroy without mercy!
     nnoremap <silent> <leader>x :bd!<CR>
 
-    " Quit all, but save to session default first.
-    " nnoremap <leader>qa :call SaveAndExit()<CR>
-    " function! SaveAndExit()
-    "     call SaveSession()
-    "     qall
-    " endfunction
-
-    " Save entire session.
-    nnoremap <silent> <leader>wa :call SaveSession()<CR>
+    " Save entire session on exit. 'vim -S ~/.vim/session/auto.vim' to
+    " restore.
     function! SaveSession()
         mks! ~/.vim/session/auto.vim
     endfunction
+    augroup savesession
+        autocmd!
+        autocmd VimLeave * call SaveSession()
+    augroup END
 
-    autocmd VimLeave * call SaveSession()
-
-    " Clear search history (i.e. stop highlights).
+    " Clear search history (i.e. stop highlights) with <leader><leader>
     nnoremap <silent> <leader><leader> :let @/=""<CR>
 
     " Center search on next item.
@@ -253,7 +240,7 @@ set nocompatible
     endfunction
 
     " Insert single character
-    nnoremap <Space> i_<Esc>r
+    nnoremap <Space> i<Space><Esc>r
 
     " Make current window the only window.
     nnoremap <Leader>o :only<cr>
@@ -302,7 +289,7 @@ set nocompatible
     nnoremap <leader>sc z= " Suggest words.
     nnoremap <leader>sr zw " Remove the word from spellfile.
 
-" Filetype settings
+" Global Filetype settings
     " Fuck plaintex
     let g:tex_flavor = "latex"
 
