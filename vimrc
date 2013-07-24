@@ -1,4 +1,5 @@
 set nocompatible
+" let loaded_matchparen = 1 " Stop paren matching, which lags when scrolling
 
 " Vundle Package Management
     " Vundle Init.
@@ -20,25 +21,21 @@ set nocompatible
 " General Bundles (i.e. not programming specific).
     " Colors!
     Bundle 'altercation/vim-colors-solarized'
-    " View open buffers in top of window.
-    Bundle 'fholgado/minibufexpl.vim'
     " Full path fuzzy file, buffer, mru, tag, finder
-    Bundle 'kien/ctrlp.vim'
-    " Nerdtree!
-    Bundle 'scrooloose/nerdtree'
+    Bundle 'Shougo/unite.vim'
+    Bundle 'Shougo/vimproc.vim'
     " Pretty status line
-    Bundle 'Lokaltog/powerline'
+	Bundle 'Lokaltog/powerline'
     " Align Text
-    Bundle 'godlygeek/tabular'
+    " Bundle 'godlygeek/tabular'
     " Delete all buffers except current
-    Bundle 'duff/vim-bufonly'
-    Bundle 'mhinz/vim-startify'
+    " Bundle 'duff/vim-bufonly'
+    " Bundle 'mhinz/vim-startify'
+    " Bundle 'dhruvasagar/vim-table-mode'
 
 " Editing Bundles
     " Auto-close characters.
-    Bundle 'Townk/vim-autoclose'
-    " Word completion
-    Bundle 'Valloric/YouCompleteMe'
+    Bundle 'Raimondi/delimitMate'
     " Comment out blocks with \\ or
     Bundle 'tpope/vim-commentary'
     " Fix the '.' command for mappings.
@@ -47,63 +44,86 @@ set nocompatible
     Bundle 'tpope/vim-surround'
     " Syntax highlighting for markdown.
     Bundle 'tpope/vim-markdown'
+    " Multiple Cursors
+    Bundle 'terryma/vim-multiple-cursors'
 
 " Programming Bundles
+    " Word completion
+    Bundle 'Valloric/YouCompleteMe'
     " Syntax checker
     Bundle 'scrooloose/syntastic'
-    " " Snipmate and its dependencies
-    Bundle 'vim-scripts/UltiSnips'
+    " Snipmate and its dependencies
+    Bundle 'SirVer/ultisnips'
     " Press <F8> for list of tags in open files.
     Bundle 'majutsushi/tagbar'
     " Pipe text between screen/tmux sesions.
     Bundle 'jpalardy/vim-slime'
+    Bundle 'LaTeX-Box-Team/LaTeX-Box'
+    " Javascrip indentation
+    Bundle 'pangloss/vim-javascript'
 
-" General
+"General
     " Enable filetype plugin
     filetype plugin on
     filetype indent on
     " Set to auto read when a file is changed from the outside
     set autoread
-    "Always show the status line.
-    set laststatus=2
-    " Hide the default mode text. I use powerline instead.
-    set noshowmode
     " With a map leader it's possible to do extra key combinations.
     " For example, <leader>w saves the current file
     let mapleader = ","
+    let maplocalleader = ","
     let g:mapleader = ","
 
     " Vim tags plugin will search up to the $HOME directory.
     set tags+=tags;$HOME
 
     " Remove any trailing whitespace that is in the file
-    autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+    augroup clearwhitespace
+        autocmd!
+        autocmd BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge |endif
+    augroup END
 
 " VIM user interface settings
     set so=7 " Set 7 lines to the curors - when moving vertical.
-    set wildmenu "Turn on WiLd menu
     set ruler "Always show current position
     set cmdheight=2 "The commandbar height
     set hid "Change buffer - without saving
     set backspace=eol,start,indent " Set backspace config
     set whichwrap+=<,>,h,l
-    set ignorecase "Ignore case when searching
+    "Ignore case when searching
+    set ignorecase
     set smartcase
     set hlsearch "Highlight search things
     set incsearch "Make search act like search in modern browsers
-    set nolazyredraw "Don't redraw while executing macros
+    " CHANGED!!
+    set lazyredraw "Don't redraw while executing macros
     set magic "Set magic on, for regular expressions
-    set showmatch "Show matching bracets when text indicator is over them
+    " set showmatch "Show matching brackets when
     set mat=2 "How many tenths of a second to blink
     " No sound on errors
     set noerrorbells
     set novisualbell
     set tm=500
+    " Open all folds initially
+    set foldmethod=indent
+    set foldlevelstart=99
+    set scrolloff=10 " limit # of lines above or below cursor
+    " Turn off sound
+    set vb
+    set t_vb=
 
-    set cul
+    " set cul
     set showcmd
+    " set number
 
-    set nonu
+    set wildmenu "Turn on WiLd menu
+    set wildmode=longest,list,full
+    set wildignore+=*.aux,*.out,*.toc " Latex intermediate files set wildignore+=.hg,.git,.svn "Version control
+
+    " Splits appear in a sensible place
+    set splitbelow
+    set splitright
+
 " Colors and Fonts
     syntax enable "Enable syntax hl
 
@@ -131,45 +151,82 @@ set nocompatible
     set cm=blowfish
 
 " Text, tab and indent related
-    set expandtab
-    set shiftwidth=2
-    set tabstop=2
     set smarttab
+    set expandtab
+    set shiftwidth=4
+    set tabstop=4
 
-    set tw=74
-    set colorcolumn=75
+    set textwidth=74
+    " Add to textwidth
+    set colorcolumn=+1
 
     set ai "Auto indent
     set si "Smart indet
     set wrap "Wrap lines
 
 " Key Mappings
+    " move down a wrapped line
+    nnoremap j gj
+    nnoremap k gk
     " Use Enter to add line below.
     nnoremap <CR> o<Esc>
-    " Stop comment leader being inserted after 'o' or 'O' in normal mode.
+    " Stop comment being inserted after 'o' or 'O' in normal mode.
     set formatoptions-=o
 
+    " Useless default mappings
+    nnoremap <F1> <nop>
+    nnoremap Q <nop>
+    nnoremap K <nop>
+
+    " Yank from the cursor to the end of the line, like C and D
+    nnoremap Y y$
+
     " Map ctrl-movement keys to window switching
-    noremap <C-k> <C-w><Up>
-    noremap <C-j> <C-w><Down>
-    noremap <C-l> <C-w><Right>
-    noremap <C-h> <C-w><Left>
+    " inoremap <buffer> <C-h> <Esc><C-w>h
+    " inoremap <buffer> <C-j> <Esc><C-w>j
+    " inoremap <buffer> <C-k> <Esc><C-w>k
+    " inoremap <buffer> <C-l> <Esc><C-w>l
+    if exists('$TMUX')
+      function! TmuxOrSplitSwitch(wincmd, tmuxdir)
+        let previous_winnr = winnr()
+        execute "wincmd " . a:wincmd
+        if previous_winnr == winnr()
+          " The sleep and & gives time to get back to vim so tmux's focus tracking
+          " can kick in and send us our ^[[O
+          execute "silent !sh -c 'sleep 0.01; tmux select-pane -" . a:tmuxdir . "' &"
+          redraw!
+        endif
+      endfunction
+      let previous_title = substitute(system("tmux display-message -p '#{pane_title}'"), '\n', '', '')
+      let &t_ti = "\<Esc>]2;vim\<Esc>\\" . &t_ti
+      let &t_te = "\<Esc>]2;". previous_title . "\<Esc>\\" . &t_te
+      nnoremap <silent> <C-h> :call TmuxOrSplitSwitch('h', 'L')<cr>
+      nnoremap <silent> <C-j> :call TmuxOrSplitSwitch('j', 'D')<cr>
+      nnoremap <silent> <C-k> :call TmuxOrSplitSwitch('k', 'U')<cr>
+      nnoremap <silent> <C-l> :call TmuxOrSplitSwitch('l', 'R')<cr>
+    else
+      map <C-h> <C-w>h
+      map <C-j> <C-w>j
+      map <C-k> <C-w>k
+      map <C-l> <C-w>l
+    endif
+
 
     " Map tab in normal mode to buffer switching.
     nnoremap <Tab> :bnext<CR>
     nnoremap <S-Tab> :bprev<CR>
 
-    " Destroy buffer with hotkey.
-    nnoremap <silent> <leader>d :bdelete<CR><S-Tab><Tab>
-    " Destory all others.
+    " Destroy all others.
     nnoremap <silent> <leader>da :BufOnly<CR>
+    " Destroy without mercy!
+    nnoremap <silent> <leader>x :bd!<CR>
 
     " Quit all, but save to session default first.
-    nnoremap <leader>qa :call SaveAndExit()<CR>
-    function! SaveAndExit()
-        call SaveSession()
-        qall
-    endfunction
+    " nnoremap <leader>qa :call SaveAndExit()<CR>
+    " function! SaveAndExit()
+    "     call SaveSession()
+    "     qall
+    " endfunction
 
     " Save entire session.
     nnoremap <silent> <leader>wa :call SaveSession()<CR>
@@ -188,9 +245,6 @@ set nocompatible
     " Use jj to leave insert mode.
     inoremap jj <Esc>
 
-    " Built in maps it is good to know.
-    " <C-w>= or <C-w>| to equalise vertical/hozontal window size.
-
     " Overwrite protected file.
     cmap w!! call SudoWrite()
     function! SudoWrite()
@@ -200,6 +254,9 @@ set nocompatible
 
     " Insert single character
     nnoremap <Space> i_<Esc>r
+
+    " Make current window the only window.
+    nnoremap <Leader>o :only<cr>
 
 " Visual mode Search
     " Really useful!
@@ -246,56 +303,68 @@ set nocompatible
     nnoremap <leader>sr zw " Remove the word from spellfile.
 
 " Filetype settings
-    " Scheme
-    autocmd Filetype scheme set foldmethod=indent
-    " Vim
-    autocmd Filetype vim set foldmethod=indent
-    " Latex
-    autocmd Filetype tex set foldmethod=indent
-    " Python
-    autocmd Filetype python set shiftwidth=4
-    autocmd Filetype python set tabstop=4
-    " Markdown
-    autocmd Filetype markdown set shiftwidth=4
-    autocmd Filetype markdown set tabstop=4
     " Fuck plaintex
     let g:tex_flavor = "latex"
 
 " Plugin Settings
+    "Unite
+        let g:unite_source_grep_command = 'ack-grep'
+        let g:unite_source_grep_default_opts =
+            \ '--column --no-color --nogroup --with-filename'
+        let g:unite_source_grep_recursive_opt = ''
+        " nno <leader>a :<C-u>Unite grep -start-insert
+        "     \ -default-action=above -auto-resize -auto-preview file<CR>
+        " nno <leader>A :<C-u>execute 'Unite grep:.::' . expand("<cword>")
+        "     \ . ' -default-action=above -auto-preview'<CR>
+        nno <leader>b :Unite -buffer-name=buffers
+            \ -quick-match buffer<cr>
+        "-auto-resize -buffer-name=buffers
+        "   \ -start-insert -quick-match<CR>
+        nno <c-p> :Unite file_rec/async -start-insert<cr>
+        " nno <c-l> :Unite -start-insert -auto-resize -buffer-name=line line<cr>
+
+        call unite#filters#matcher_default#use(['matcher_fuzzy'])
+        call unite#filters#sorter_default#use(['sorter_rank'])
+
+        let g:unite_source_history_yank_enable = 1
+        nno <leader>y :Unite history/yank -auto-resize<cr>
+        let g:ycm_filetype_specific_completion_to_disable = {"unite":1}
+
     " Powerline
-    set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
-    if ! has('gui_running')
-        augroup FastEscape
-            autocmd!
-            au InsertEnter * set timeoutlen=200
-            au InsertLeave * set timeoutlen=500
-        augroup END
-    endif
-
-    " Mini-Buf Explorer
-        noremap <leader>c :CMiniBufExplorer<cr>
-        noremap <leader>u :UMiniBufExplorer<cr>
-        noremap <leader>t :TMiniBufExplorer<cr>
-
-    " NERDTree
-        " Open nerdtree if just vim opened.
-        " autocmd vimenter * if !argc() | NERDTree | endif
-        " Close vim if only nerdtree open
-        autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-        nnoremap <silent> <leader>nt :NERDTreeToggle<CR>
-
-    " Tag Browser (currently Tagbar)
-        " Toggle tag browser with F8
-        nnoremap <silent> <F8> :TagbarToggle<CR>
-        let g:tagbar_autoclose=1
-        let g:tagbar_width = 30
+        set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+        if ! has('gui_running')
+            augroup FastEscape
+                autocmd!
+                au InsertEnter * set timeoutlen=200
+                au InsertLeave * set timeoutlen=500
+            augroup END
+        endif
+        " Powerline displays the status.
+        set laststatus=2 "Always show the status line.
+        set noshowmode " I use powerline instead.
+        exec "python import vim, os, sys"
+        exec "python sys.path.append('" . $HOME
+            \ . "/.vim/powerline-settings/matchers')"
+        let g:powerline_config_path = expand("~/.vim/powerline-settings")
 
     " Syntastic
-      " By default, don't auto check files.
-      " Use :SyntasticCheck to check the file.
-      let g:syntastic_mode_map = { 'mode': 'passive',
-                                 \ 'active_filetypes': [],
-                                 \ 'passive_filetypes': [] }
+        " By default, don't auto check files.
+        " Use :SyntasticCheck to check the file.
+        let g:syntastic_mode_map = { 'mode': 'passive',
+                                    \ 'active_filetypes': [],
+                                    \ 'passive_filetypes': [] }
 
     " Slime
-      let g:slime_target = "tmux"
+        let g:slime_target = "tmux"
+
+    " Startify
+        let g:startify_show_files_number = 5
+
+    " Ultisnips integration with YCM
+        let g:UltiSnipsExpandTrigger="<c-j>"
+        let g:UltiSnipsJumpForwardTrigger="<c-j>"
+        let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+    " Latexbox options
+        let g:LatexBox_split_side="rightbelow"
+        let g:LatexBox_Folding=1

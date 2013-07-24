@@ -19,6 +19,15 @@ Powerline requires some installation. UTF-8 support for terminal etc. See the
 documentation. I need to run this command sometimes when it updates.
 > pip install --user -U git+git://github.com/Lokaltog/powerline
 
+Compiling
+---------
+
+Several packages need to be compiled. See their docs for details.
+
+* YouCompleteMe
+* Vimproc
+
+
 Shell aliases
 ------------
 
