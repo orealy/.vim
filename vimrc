@@ -64,6 +64,7 @@ set nocompatible
     Bundle 'LaTeX-Box-Team/LaTeX-Box'
     " Javascrip indentation
     Bundle 'pangloss/vim-javascript'
+    Bundle 'tpope/vim-fugitive'
 
 "General
     " Enable filetype plugin
