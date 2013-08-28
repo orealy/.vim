@@ -1,6 +1,6 @@
 set shiftwidth=2
 set tabstop=2
 
-set makeprg=latexmk
-set autowrite
-nnoremap <buffer> <leader>m :make -pdf %<CR>
+" set makeprg="latexmk -e '$pdflatex=q/pdflatex -interaction=nonstopmode'
+" set autowrite
+" noremap <buffer> <leader>m :make -pdf %<CR>
